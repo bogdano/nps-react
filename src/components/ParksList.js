@@ -25,7 +25,8 @@ function ParksList({ startLocation }) {
         const closestParks = await fetchDrivingDistances(startLocation, parksData);
   
         // Update state with the 9 closest parks returned
-        setParks(closestParks.slice(0, 9));
+        setParks(closestParks.slice(0, 6));
+        console.log(closestParks.slice(0, 6));
         // setParks(closestParks);
         setLoading(false);
       } catch (err) {

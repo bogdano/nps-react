@@ -11,7 +11,7 @@ export const fetchDrivingDistances = async (startCoordinates, parksData) => {
     }));
 
     // Sort by as-the-crow-flies distance and pick the top N closest for detailed calculation
-    const closestParks = parks.sort((a, b) => a.haversineDistance - b.haversineDistance).slice(0, 24);
+    let closestParks = parks.sort((a, b) => a.haversineDistance - b.haversineDistance).slice(0, 6);
 
     // Prepare points for the Mapbox Matrix API, using only the closest parks
     const points = closestParks.map(park => ({ coordinates: park.coordinates }));
@@ -21,6 +21,8 @@ export const fetchDrivingDistances = async (startCoordinates, parksData) => {
 
     // Fetch driving distances
     const response = await mapboxClient.getMatrix({
+      // use only first index as source
+      sources: [0],
       points,
       profile: 'driving',
       annotations: ['distance']
@@ -32,6 +34,7 @@ export const fetchDrivingDistances = async (startCoordinates, parksData) => {
         park.drivingDistance = response.body.distances[0][index + 1]; // +1 to skip the start location
       });
 
+      closestParks = closestParks.filter(park => park.drivingDistance !== null);
       // Return parks sorted by driving distance
       return closestParks.sort((a, b) => a.drivingDistance - b.drivingDistance);
     } else {

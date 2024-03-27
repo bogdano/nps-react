@@ -12,6 +12,8 @@ function LocationSearch({ onLocationSelect }) {
       mapboxgl: mapboxgl,
       placeholder: 'Enter start location',
       marker: false,
+      countries: 'us',
+      types: 'place',
     });
 
     if (searchInputRef.current) {
@@ -28,7 +30,9 @@ function LocationSearch({ onLocationSelect }) {
   }, [onLocationSelect]);
 
   return (
-    <div className='flex justify-center my-6' ref={searchInputRef} />
+    <div className='flex justify-center py-6'>
+        <div ref={searchInputRef} />
+    </div>
     );
 }
 
